@@ -2,7 +2,9 @@
   <div class="bg-white sticky top-0 left-0 z-10">
     <ul ref="ulTarget" class="relative flex overflow-x-auto p-1 text-xs text-zinc-600 overflow-hidden">
       <!-- 汉堡按钮 -->
-      <li class="z-20 fixed top-0 right-[-1px] h-4 px-1 flex items-center bg-white shadow-l-white">
+      <li 
+        class="z-20 fixed top-0 right-[-1px] h-4 px-1 flex items-center bg-white shadow-l-white"
+        @click="isOpenPopup = !isOpenPopup">
         <m-svg-icon class="w-1.5 h-1.5" name="hamburger"></m-svg-icon>
       </li>
       <!-- 滑块 -->
@@ -13,11 +15,15 @@
         item.name }}
       </li>
     </ul>
+    <m-popup v-model="isOpenPopup">
+      <menu-vue :categorys="data" @onItemClick="onItemClick"></menu-vue>
+    </m-popup>
   </div>
 </template>
 <script setup>
 import { ref, watch, onBeforeUpdate } from 'vue'
 import { useScroll } from '@vueuse/core'
+import MenuVue from '../../menu/index.vue'
 
 defineProps({
   data: {
@@ -30,7 +36,7 @@ const sliderStyle = ref({
   transform: 'translateX(0px)',
   width: '52px'
 })
-
+const isOpenPopup = ref(false)
 // 选中的 item 下标
 const currentCategoryIndex = ref(0)
 // 获取填充的所有 item 元素
@@ -59,5 +65,6 @@ watch(currentCategoryIndex, (val) => {
 // item 点击事件
 const onItemClick = (index) => {
   currentCategoryIndex.value = index
+  isOpenPopup.value = false
 }
 </script>
